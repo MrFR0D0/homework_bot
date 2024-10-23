@@ -1,14 +1,14 @@
-class NO_TOKEN(Exception):
+class NoToken(Exception):
     """Обработка исключения отсутствия токена."""
 
-    def __init__(self, token):
+    def __init__(self, *args):
         """Конструктор класса исключения."""
-        txt = f'''Отсутствует обязательная переменная окружения: {token}
+        txt = f'''Отсутствует обязательная переменная окружения: {args}
                     Программа принудительно остановлена.'''
         super().__init__(txt)
 
 
-class ANSWER_API(Exception):
+class AnswerAPI(Exception):
     """Обработка исключения овета API."""
 
     def __init__(self):
@@ -17,7 +17,7 @@ class ANSWER_API(Exception):
         super().__init__(txt)
 
 
-class status_API(Exception):
+class StatusAPI(Exception):
     """Обработка исключения статуса API."""
 
     def __init__(self):
@@ -26,7 +26,7 @@ class status_API(Exception):
         super().__init__(txt)
 
 
-class NO_HW_NAME(Exception):
+class NoHWName(Exception):
     """Обработка исключения отсутствия имени ДЗ."""
 
     def __init__(self):
@@ -35,16 +35,27 @@ class NO_HW_NAME(Exception):
         super().__init__(txt)
 
 
-class check_API(Exception):
+class CheckAPI(Exception):
     """Обработка исключения ответа API."""
 
-    def __init__(self):
+    def __init__(self, wait_type, fact_type):
         """Конструктор класса исключения."""
-        txt = 'Ответ API не соответствует документации ЯП'
+        txt = f'''Ответ API не соответствует документации ЯП.
+        Тип данны {fact_type} вместо ожидаемого {wait_type}'''
         super().__init__(txt)
 
 
-class cant_sent_TG(Exception):
+class NoKeyAPI(Exception):
+    """Обработка исключения ответа API."""
+
+    def __init__(self, key):
+        """Конструктор класса исключения."""
+        txt = f'''Ответ API не соответствует документации ЯП.
+        Отсутствует ключ {key}'''
+        super().__init__(txt)
+
+
+class CantSentTG(Exception):
     """Обработка невозможности отправки TG."""
 
     def __init__(self):
@@ -53,7 +64,7 @@ class cant_sent_TG(Exception):
         super().__init__(txt)
 
 
-class endpoint_NA(Exception):
+class EndpointNA(Exception):
     """Обработка исключения статуса API."""
 
     def __init__(self):
