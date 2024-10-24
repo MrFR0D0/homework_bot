@@ -41,7 +41,7 @@ class CheckAPI(Exception):
     def __init__(self, wait_type, fact_type):
         """Конструктор класса исключения."""
         txt = f'''Ответ API не соответствует документации ЯП.
-        Тип данны {fact_type} вместо ожидаемого {wait_type}'''
+        Тип данных {fact_type} вместо ожидаемого {wait_type}'''
         super().__init__(txt)
 
 

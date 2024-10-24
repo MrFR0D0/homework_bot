@@ -31,6 +31,10 @@ HOMEWORK_VERDICTS = {
     'rejected': 'Работа проверена: у ревьюера есть замечания.'
 }
 
+logger = logging.getLogger(__name__)
+handler = StreamHandler(stream=sys.stdout)
+logger.addHandler(handler)
+
 
 def check_tokens():
     """Проверяет доступность переменных окружения."""
@@ -40,12 +44,11 @@ def check_tokens():
         'TELEGRAM_CHAT_ID': TELEGRAM_CHAT_ID,
     }
     troubles = []
-    for token in TOKENS.keys():
-        if TOKENS.get(token) is None:
+    for token in TOKENS.items():
+        if token[1] is None:
             troubles.append(token)
-    if len(troubles) != 0:
-
-        logging.critical(
+    if troubles:
+        logger.critical(
             f'''Проблема с обязательными переменными окружения!
             Отсутствует: {troubles}'''
         )
@@ -55,17 +58,19 @@ def check_tokens():
 def send_message(bot, message):
     """Отправляет сообщение в Telegram-чат."""
     try:
-        logging.debug('Начало отправления сообщения в TG')
+        logger.debug('Начало отправления сообщения в TG')
         bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message)
-        logging.debug('Сообщение в TG направлено')
+        logger.debug('Сообщение в TG направлено')
+        return True
     except (requests.RequestException, telebot.apihelper.ApiException):
-        logging.error(exceptions.CantSentTG())
+        logger.error(exceptions.CantSentTG())
+        return False
 
 
 def get_api_answer(timestamp):
     """Делает запрос к единственному эндпоинту API-сервиса."""
     try:
-        logging.debug('Начало запроса к API')
+        logger.debug('Начало запроса к API')
         homework_statuses = requests.get(
             ENDPOINT,
             headers=HEADERS,
@@ -107,30 +112,25 @@ def main():
     check_tokens()
     bot = TeleBot(token=TELEGRAM_TOKEN)
     timestamp = int(time.time()) - ONE_MONTH
-    logger = logging.getLogger(__name__)
-    handler = StreamHandler(stream=sys.stdout)
-    logger.addHandler(handler)
-    old_message = None
+    message_error = None
     while True:
         try:
             api_answer = get_api_answer(timestamp)
             hw_data = check_response(api_answer)
-            if len(hw_data) != 0:
+            if hw_data:
                 message = parse_status(hw_data[0])
-                timestamp = api_answer.get('current_date')
+                tg_message_sent = send_message(bot, message)
+                if tg_message_sent:
+                    timestamp = api_answer.get('current_date', timestamp)
+                    message_error = None
             else:
-                logging.debug('В ответе отсутвует новый статус')
-                message = ('В ответе отсутвует новый статус')
+                logger.debug('В ответе отсутвует новый статус')
         except Exception as error:
-            logging.error(error)
-            message = f'Сбой в работе программы: {error}'
-            if message != old_message:
+            logger.error(error)
+            if message_error != error:
+                message = f'Сбой в работе программы: {error}'
                 send_message(bot, message)
-                old_message = message
-        else:
-            if message != old_message:
-                send_message(bot, message)
-                old_message = message
+                message_error = error
         finally:
             time.sleep(RETRY_PERIOD)
 
