@@ -12,6 +12,7 @@ Telegram-бот, который обращается к API сервиса Пр�
 ### Стек технологий
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Telegram](https://img.shields.io/badge/Telegram-26A5E4?style=for-the-badge&logo=telegram?logoColor=white)
+![Telebot](https://img.shields.io/badge/Telebot-66A7E4?style=for-the-badge&logo=telebot?logoColor=white)
 ### Как запустить проект
 
 Клонировать репозиторий и перейти в него в командной строке:
