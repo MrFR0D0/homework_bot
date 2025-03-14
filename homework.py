@@ -38,19 +38,19 @@ logger.addHandler(handler)
 
 def check_tokens():
     """Проверяет доступность переменных окружения."""
-    TOKENS = {
+    tokens = {
         'PRACTICUM_TOKEN': PRACTICUM_TOKEN,
         'TELEGRAM_TOKEN': TELEGRAM_TOKEN,
         'TELEGRAM_CHAT_ID': TELEGRAM_CHAT_ID,
     }
     troubles = []
-    for token in TOKENS.items():
+    for token in tokens.items():
         if token[1] is None:
             troubles.append(token)
     if troubles:
         logger.critical(
-            f'''Проблема с обязательными переменными окружения!
-            Отсутствует: {troubles}'''
+            'Проблема с обязательными переменными окружения!'
+            f'Отсутствует: {troubles}'
         )
         raise exceptions.NoToken(*troubles)
 
