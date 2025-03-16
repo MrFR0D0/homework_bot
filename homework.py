@@ -28,7 +28,7 @@ HEADERS = {'Authorization': f'OAuth {PRACTICUM_TOKEN}'}
 HOMEWORK_VERDICTS = {
     'approved': 'Работа проверена: ревьюеру всё понравилось. Ура!',
     'reviewing': 'Работа взята на проверку ревьюером.',
-    'rejected': 'Работа проверена: у ревьюера есть замечания.'
+    'rejected': 'Работа проверена: у ревьюера есть замечания.',
 }
 
 logger = logging.getLogger(__name__)
@@ -50,7 +50,7 @@ def check_tokens():
     if troubles:
         logger.critical(
             'Проблема с обязательными переменными окружения!'
-            f'Отсутствует: {troubles}'
+            f'Отсутствует: {troubles}',
         )
         raise exceptions.NoToken(*troubles)
 
@@ -74,7 +74,7 @@ def get_api_answer(timestamp):
         homework_statuses = requests.get(
             ENDPOINT,
             headers=HEADERS,
-            params={'from_date': timestamp}
+            params={'from_date': timestamp},
         )
     except requests.RequestException:
         raise exceptions.EndpointNA()

@@ -4,9 +4,13 @@ charset-normalizer==2.0.12
 click==8.1.8
 flake8==5.0.4
 flake8-builtins==2.5.0
+flake8-commas==4.0.0
 flake8-docstrings==1.6.0
 flake8-isort==6.1.2
+flake8-multiline-containers==0.0.19
+flake8-polyfill==1.0.2
 flake8-quotes==3.4.0
+flake8-variables-names==0.0.6
 idna==3.10
 iniconfig==2.0.0
 isort==5.13.2
